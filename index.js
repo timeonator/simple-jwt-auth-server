@@ -64,6 +64,17 @@ app.get('/user/:email', cors(corsOptions), function (req, res, next) {
     });
   });
 
+  app.get('/username/:username', cors(corsOptions), function (req, res, next) {
+    let query=`SELECT * FROM users where username=?`;
+
+    console.log("Query params: ", JSON.stringify(req.params));
+    connection.query(query, [req.params.username,req.params.password],  function (err, result, fields) {
+        if (err) throw err
+        console.log("Query Result: ", JSON.stringify(result));
+        res.send(JSON.stringify(result));
+    });
+  });
+
   app.post('/user',  function(req, res) {
       let query=`insert into users set users.email = ?, users.password=?`;
     
@@ -84,11 +95,12 @@ app.post('/user:index', (req, res) => {
     console.log(`post to /user port ${PORT}`);
 });
 
-app.post('/users/:first_name/:last_name/:email/:username', (req, res) => {
+app.post('/register/:first_name/:last_name/:email/:username', (req, res) => {
     let sql = `INSERT INTO users(first_name, last_name, email, username) VALUES( ?, ?, ?, ?)`;
     let p = req.params;
     // console.log(p);
-    let params = [req.params.first_name, p.last_name, p.email, p.username];
+    let params = [p.first_name, p.last_name, p.email, p.username];
+    console.log("params: ", params)
     connection.query(sql, [p.first_name,p.last_name,p.email,p.username], (error, results, fields) => {
       if (error){
         return console.error(error.message);
