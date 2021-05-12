@@ -66,8 +66,7 @@ app.get('/user/:email', cors(corsOptions), function (req, res, next) {
 
   app.get('/username/:username', cors(corsOptions), function (req, res, next) {
     let query=`SELECT * FROM users where username=?`;
-
-    console.log("Request Body: ", req.body);
+    console.log("Query params: ", JSON.stringify(req.params));
     connection.query(query, [req.params.username,req.params.password],  function (err, result, fields) {
         if (err) throw err
         console.log("Query Result: ", JSON.stringify(result));
